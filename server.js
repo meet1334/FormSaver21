@@ -14,11 +14,13 @@ app.use(express.urlencoded());
 //===================== ROUTES ===================================
 const authRouter = require("./src/routes/auth");
 const adminUserRouter = require("./src/routes/adminUser");
+const userRouter = require("./src/routes/user");
 app.get("/", (req, res) => {
   res.send("hi,i am live");
 });
 app.use("/api", authRouter.router);
 app.use("/api/adminuser", adminUserRouter.router);
+app.use("/api/user", userRouter.router);
 
 //================================================================
 

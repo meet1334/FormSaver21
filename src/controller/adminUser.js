@@ -31,6 +31,7 @@ const getAllAdminUsers = async (req, res) => {
     const users = await AdminUser.find(
       { isDeleted: false },
       {
+        _id: 1,
         firstname: 1,
         lastname: 1,
         role: 1,

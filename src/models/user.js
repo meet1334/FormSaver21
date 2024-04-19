@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const userSchema = new Schema({
   createdBy: [{ type: Schema.Types.ObjectId, ref: "AdminUser" }],
   firstname: { type: String, trim: true, required: true },
-  middlename: { type: String, trim: true, required },
+  middlename: { type: String, trim: true, required:true },
   lastname: { type: String, trim: true, required: true },
   title: { type: String, trim: true, required: true },
   email: {
@@ -36,3 +36,5 @@ const userSchema = new Schema({
 });
 
 exports.User = mongoose.model("User", userSchema);
+
+// moongse.schema.ObjectId
