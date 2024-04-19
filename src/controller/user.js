@@ -31,7 +31,7 @@ const getUser = async (req, res) => {
         deletedAt: 0,
         isDeleted: 0,
       }
-    );
+    ).populate("createdBy", { firstname: 1, lastname: 1, role: 1 });
     if (user) {
       res
         .status(200)
@@ -56,11 +56,11 @@ const getAllUsers = async (req, res) => {
         isActive: 1,
         createdBy: 1,
       }
-    );
+    ).populate("createdBy", { firstname: 1, lastname: 1, role: 1 });
     if (user) {
       res
         .status(200)
-        .send({ data: user, message: "User Data fetched successfully" });
+        .send({ data: user, message: "Users Data fetched successfully" });
     } else {
       res.status(200).send({ data: user, message: "No Data Found" });
     }
@@ -80,7 +80,7 @@ const getUsers = async (req, res) => {
         deletedAt: 0,
         isDeleted: 0,
       }
-    );
+    ).populate("createdBy", { firstname: 1, lastname: 1, role: 1 });
     res
       .status(200)
       .send({ data: users, message: "User Data fetched successfully" });
