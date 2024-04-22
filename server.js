@@ -7,7 +7,7 @@ const path = require("path");
 const connectDB = require("./src/db/connect");
 
 // ==================== Bodyparsers==============================
-
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded());
 
