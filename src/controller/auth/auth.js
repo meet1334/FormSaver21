@@ -61,7 +61,6 @@ const loginAdminUser = async (req, res) => {
           let options = {
             maxAge: 1000 * 60 * 15, // would expire after 15 minutes
             httpOnly: true,
-            secure: true,
           };
           res.cookie("formsaver21jwttoken", "hello mans", options);
 
