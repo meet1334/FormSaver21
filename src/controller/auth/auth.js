@@ -59,10 +59,10 @@ const loginAdminUser = async (req, res) => {
         .then(() => {
           // set cookies   //===============================================================================
           let options = {
-            maxAge: 1000 * 60 * 15, // would expire after 15 minutes
+            expires: new Date(Date.now() + 100000000),
             httpOnly: true,
           };
-          res.cookie("formsaver21jwttoken", "hello mans", options);
+          res.cookie("formsaver21jwttoken", "hellomans", options);
 
           // set cookies   //===============================================================================
           res.status(200).json({
