@@ -26,7 +26,7 @@ const registerAdminUser = async (req, res) => {
   adminUser
     .save()
     .then((result) => {
-      res.status(201).send({ message: "data saved successfully" });
+      res.status(200).send({ message: "data saved successfully" });
     })
     .catch((error) => {
       res
@@ -36,7 +36,6 @@ const registerAdminUser = async (req, res) => {
 };
 
 const loginAdminUser = async (req, res) => {
-  console.log(req.body);
   try {
     const doc = await AdminUser.findOne({
       $or: [{ email: req.body.email }, { username: req.body.email }],
@@ -44,7 +43,7 @@ const loginAdminUser = async (req, res) => {
     const isAuth = bcrypt.compareSync(req.body.password, doc.password);
     if (isAuth) {
       const token = jwt.sign(
-        { email: req.body.email, userLevel: doc.role },
+        { email: req.body.email, userLevel: doc.role, userId: doc._id },
         privateKey,
         {
           algorithm: "RS256",
@@ -58,11 +57,11 @@ const loginAdminUser = async (req, res) => {
         .save()
         .then(() => {
           // set cookies   //===============================================================================
-          let options = {
-            expires: new Date(Date.now() + 100000000),
-            httpOnly: true,
-          };
-          res.cookie("formsaver21jwttoken", "hellomans", options);
+          // let options = {
+          //   expires: new Date(Date.now() + 100000000),
+          //   httpOnly: true,
+          // };
+          // res.cookie("formsaver21jwttoken", "hellomans", options);
 
           // set cookies   //===============================================================================
           res.status(200).json({
