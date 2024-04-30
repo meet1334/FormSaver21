@@ -1,7 +1,7 @@
 const model = require("../models/user");
 const User = model.User;
 const bcrypt = require("bcrypt");
-
+const excelJS = require("exceljs");
 const createUser = async (req, res) => {
   try {
     const user = new User(req.body);
@@ -156,6 +156,88 @@ const deleteUser = async (req, res) => {
   }
 };
 
+
+const exportUsers = async (req, res) => {
+  try {
+    const workbook = new excelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Users");
+
+    worksheet.columns = [
+      {
+        header: "No.",
+        key: "s_no",
+        width: "10",
+      },
+      {
+        header: "First Name",
+        key: "firstname",
+        width: "20",
+      },
+      {
+        header: "Middle Name",
+        key: "middlename",
+        width: "20",
+      },
+      {
+        header: "Last Name",
+        key: "lastname",
+        width: "20",
+      },
+      {
+        header: "Email",
+        key: "email",
+        width: "20",
+      },
+      {
+        header: "Phone",
+        key: "phoneNumber",
+        width: "20",
+      },
+      {
+        header: "Profession",
+        key: "profession",
+        width: "20",
+      },
+      {
+        header: "City",
+        key: "city",
+        width: "20",
+      },
+    ];
+    const modifyFilter = [{ isDeleted: false }];
+    const UserData = await User.find(...modifyFilter);
+
+    let counter = 1;
+
+    UserData.forEach((user) => {
+      user.s_no = counter;
+      worksheet.addRow(user);
+      counter++;
+    });
+
+    worksheet.getRow(1).eachCell((cell) => {
+      cell.font = {
+        bold: true,
+      };
+    });
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=" + "Users.xlsx"
+    );
+
+    // workbook.xlsx.write(res);
+    return workbook.xlsx.write(res).then(() => {
+      res.status(200);
+      res.end();
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 module.exports = {
   createUser,
   getUser,
@@ -163,4 +245,5 @@ module.exports = {
   getAllUsers,
   updateUser,
   deleteUser,
+  exportUsers
 };
