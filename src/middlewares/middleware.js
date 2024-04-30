@@ -10,7 +10,6 @@ const authMiddleware = (req, res, next) => {
       const token = req?.get("Authorization")?.split("Bearer ")[1];  
       // var decoded = jwt?.verify(token,process.env.SECRET_KEY );
       var decoded = jwt?.verify(token, publicKey);
-      console.log(decoded);
       if (decoded.email) {
         next();
       } else {

@@ -1,6 +1,7 @@
 const model = require("../../models/adminUser");
 const AdminUser = model.AdminUser;
 const jwt = require("jsonwebtoken");
+// const cookieParser = require('cookie-parser')
 const fs = require("fs");
 const path = require("path");
 // const p = require('../../../')
@@ -25,7 +26,7 @@ const registerAdminUser = async (req, res) => {
   adminUser
     .save()
     .then((result) => {
-      res.status(201).send({ message: "data saved successfully" });
+      res.status(200).send({ message: "data saved successfully" });
     })
     .catch((error) => {
       res
@@ -35,21 +36,34 @@ const registerAdminUser = async (req, res) => {
 };
 
 const loginAdminUser = async (req, res) => {
-  console.log(req.body);
   try {
     const doc = await AdminUser.findOne({
       $or: [{ email: req.body.email }, { username: req.body.email }],
     });
     const isAuth = bcrypt.compareSync(req.body.password, doc.password);
     if (isAuth) {
-      const token = jwt.sign({ email: req.body.email }, privateKey, {
-        algorithm: "RS256",
-      });
+      const token = jwt.sign(
+        { email: req.body.email, userLevel: doc.role, userId: doc._id },
+        privateKey,
+        {
+          algorithm: "RS256",
+        }
+      );
+
+      // Assign refresh token in http-only cookie
 
       doc.token = token;
       doc
         .save()
         .then(() => {
+          // set cookies   //===============================================================================
+          // let options = {
+          //   expires: new Date(Date.now() + 100000000),
+          //   httpOnly: true,
+          // };
+          // res.cookie("formsaver21jwttoken", "hellomans", options);
+
+          // set cookies   //===============================================================================
           res.status(200).json({
             accessToken: { jwt: token },
             message: "Login successful.",
